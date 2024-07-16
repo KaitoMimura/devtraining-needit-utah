@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?><database>
+    <element db_object_id="a8c663a393db0210155e398efaba10a7" label="Test Custom Table" max_length="40" name="x_58872_needit_test_custom_table" type="collection">
+        <element label="tmp" max_length="40" name="tmp" type="string"/>
+        <element label="Date" max_length="40" name="date" type="glide_date"/>
+        <element attributes="ignore_filter_on_new=true" default="javascript:global.getNextObjNumberPadded();" label="Number" max_length="40" name="number" type="string"/>
+        <element label="text" max_length="40" name="text" type="string"/>
+    </element>
+</database>

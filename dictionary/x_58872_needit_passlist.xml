@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?><database>
+    <element db_object_id="455d2aa5832fce10a266b955eeaad3c9" label="PassList" max_length="40" name="x_58872_needit_passlist" type="collection">
+        <element attributes="edge_encryption_enabled=true" label="システム名" max_length="40" name="u_system_name" type="string"/>
+        <element attributes="edge_encryption_enabled=true" label="プロダクト名" max_length="40" name="u_puroduct_name" type="string"/>
+        <element attributes="edge_encryption_enabled=true" label="ポート番号" max_length="40" name="u_port_num" type="string"/>
+        <element label="IPアドレス" max_length="18" name="ip" type="string"/>
+    </element>
+</database>

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update sys_domain="global" table="sys_script_client">
+    <sys_script_client action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <applies_extended>false</applies_extended>
+        <condition/>
+        <description>IPアドレス（文字列）の入力値を数字変換する</description>
+        <field>ip</field>
+        <global>true</global>
+        <isolate_script>true</isolate_script>
+        <messages/>
+        <name>S_IpStrToIpNum_onChange</name>
+        <order/>
+        <script><![CDATA[function onChange(control, oldValue, newValue, isLoading, isTemplate) {
+    if (isLoading || newValue === '') {
+        return;
+    }
+
+    //Type appropriate comment here, and begin script below
+    var ip = newValue;
+
+    // IPアドレス（文字列）を数値に変換する関数
+    function GetIpNum(ipAddr) {
+        var ip = ipAddr.match(/^(\d+)\.(\d+)\.(\d+)\.(\d+)$/);
+        if (ip) {
+            // 各オクテットが0~255の範囲外の場合、falseを返す
+            for (var i = 1; i <= 4; i++) {
+                if (ip[i] < 0 || ip[i] > 255) {
+                    return false;
+                }
+            }
+            var num = (+ip[1] << 24) + (+ip[2] << 16) + (+ip[3] << 8) + +ip[4];
+            return num >>> 0;
+        }
+        // 正規表現に一致しない場合、falseを返す
+        return false;
+    }
+    // サブネットマスクに対応するビット列を返す関数
+    function IpMask(maskSize) {
+        if (maskSize < 0 || maskSize > 32) {
+            return false;
+        }
+        var num = -1 << (32 - maskSize);
+        return num;
+    }
+
+    // CIDR表記かどうかを確認
+    if (ip.includes('/')) {
+        //var [cidrIp, cidrSm] = ip.split('/'); // この書き方はSNOWでは構文エラーとされる。
+        var cidrParts = ip.split('/');
+        var cidrIp = cidrParts[0];
+        var cidrSm = cidrParts[1];
+
+        var maskSize = parseInt(cidrSm, 10);
+        var ipNumber = GetIpNum(cidrIp);
+        var mask = IpMask(maskSize);
+
+        // レンジの最初の値と最後の値を計算
+        var rangeStart = ipNumber & mask;
+        var rangeEnd = rangeStart | ~mask;
+		rangeStart = rangeStart >>> 0;
+		rangeEnd = rangeEnd >>> 0;
+		g_form.setValue("ip_addr_num", rangeStart);
+		g_form.setValue("ip_addr_end_num", rangeEnd);
+		return;
+        //return [rangeStart >>> 0, rangeEnd >>> 0]; // ビット演算結果を符号なし整数に変換
+    } else {
+        // CIDR表記でない場合は単純に数値に変換
+        // return IPnumber(ip) >>> 0; // ビット演算結果を符号なし整数に変換
+		var ip_num = GetIpNum(ip);
+		g_form.setValue("ip_addr_num", ip_num);
+		g_form.setValue("ip_addr_end_num", ip_num);
+		return;
+    }
+
+}]]></script>
+        <sys_class_name>sys_script_client</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2024-07-30 04:59:59</sys_created_on>
+        <sys_domain>global</sys_domain>
+        <sys_domain_path>/</sys_domain_path>
+        <sys_id>20f6c74c83370a90a266b955eeaad316</sys_id>
+        <sys_mod_count>12</sys_mod_count>
+        <sys_name>S_IpStrToIpNum_onChange</sys_name>
+        <sys_overrides/>
+        <sys_package display_value="NeedIt" source="x_58872_needit">6ead8e780f603200cd674f8ce1050ed1</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="NeedIt">6ead8e780f603200cd674f8ce1050ed1</sys_scope>
+        <sys_update_name>sys_script_client_20f6c74c83370a90a266b955eeaad316</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2024-07-30 07:17:45</sys_updated_on>
+        <table>x_58872_needit_passlist_range</table>
+        <type>onChange</type>
+        <ui_type>10</ui_type>
+        <view/>
+    </sys_script_client>
+</record_update>
